@@ -29,6 +29,7 @@ plugins {
     id("jacoco")
     id("org.checkerframework") version "0.6.20"
     id("com.github.spotbugs") version "5.0.13"
+    id("org.sonarqube") version "3.5.0.2730"
 }
 
 group = "eu.volsch"
@@ -42,6 +43,18 @@ java {
 
 jacoco {
     toolVersion = "0.8.8"
+}
+
+sonar {
+    properties {
+        property("sonar.projectKey", "volsch_stockmountain")
+        property("sonar.organization", "volsch")
+        property("sonar.host.url", "https://sonarcloud.io")
+
+        property("sonar.java.checkstyle.reportPaths",
+                "build/reports/checkstyle/main.xml,build/reports/checkstyle/test.xml")
+        property("sonar.java.spotbugs.reportPaths", "build/reports/spotbugs/main.xml")
+    }
 }
 
 repositories {
@@ -75,8 +88,8 @@ dependencies {
     checkerFramework("org.checkerframework:checker:$checkerFrameworkVersion")
 }
 
-tasks.wrapper {
-    gradleVersion = "7.6"
+tasks.withType<JavaCompile> {
+    options.encoding = "UTF-8"
 }
 
 tasks.getByName<Test>("test") {
@@ -89,6 +102,10 @@ tasks.test {
 
 tasks.jacocoTestReport {
     dependsOn(tasks.test)
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
 }
 
 tasks.jacocoTestCoverageVerification {
@@ -122,14 +139,22 @@ tasks.withType<Checkstyle>().configureEach {
     maxWarnings = 0
     reports {
         require(true)
-        xml.required.set(false)
+        xml.required.set(true)
         html.required.set(true)
     }
 }
 
 tasks.spotbugsMain {
+    reports.create("xml") {
+        required.set(true)
+    }
     reports.create("html") {
         required.set(true)
         setStylesheet("fancy-hist.xsl")
     }
+}
+
+tasks.sonar {
+    dependsOn(tasks.jacocoTestReport, tasks.checkstyleMain, tasks.checkstyleTest,
+            tasks.spotbugsMain, tasks.spotbugsTest)
 }

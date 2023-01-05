@@ -1,5 +1,12 @@
-LICENSE   text
-*.md      text
+LICENSE       text
+gradlew       text eol=lf
 
-*.java    text
-*.kts     text
+*.bat         text eol=crlf
+
+*.properties  text
+*.java        text
+*.kts         text
+*.md          text
+*.yml         text
+
+*.jar         binary

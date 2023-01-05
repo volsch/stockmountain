@@ -3,7 +3,7 @@
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted
  * provided that the following conditions are met:
- *  
+ *
  * 1. Redistributions of source code must retain the above copyright notice, this list of conditions
  *    and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice, this list of
@@ -23,18 +23,43 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-plugins {
-    id("com.gradle.enterprise") version "3.9"
-}
+package eu.volsch.stockmountain.extraction.conversion;
 
-rootProject.name = "stockmountain"
 
-gradleEnterprise {
-    if ("true".equals(System.getenv("CI"), true)) {
-        buildScan {
-            publishAlways()
-            termsOfServiceUrl = "https://gradle.com/terms-of-service"
-            termsOfServiceAgree = "yes"
-        }
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
+/**
+ * Abstract converter implementation that handles leading and trailing spaces and also converts to
+ * <code>null</code> if resulting string is empty.
+ *
+ * @param <T> the target value type.
+ */
+public abstract class AbstractStringConverter<T> implements Converter<String, T> {
+
+  @Override
+  public final @NonNull Class<String> getSourceType() {
+    return String.class;
+  }
+
+  @Override
+  public final @Nullable T convert(@Nullable String source) throws ConversionException {
+    if (source == null) {
+      return null;
     }
+    source = source.trim();
+    if (source.isEmpty()) {
+      return null;
+    }
+    return doConvert(source);
+  }
+
+  /**
+   * Converts the specified non-null source value to the {@linkplain #getTargetType() target type}.
+   *
+   * @param source the source value that should be converted.
+   * @return the converted source value.
+   * @throws ConversionException thrown if the conversion cannot be performed.
+   */
+  protected abstract T doConvert(@NonNull String source) throws ConversionException;
 }

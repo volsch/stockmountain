@@ -3,7 +3,7 @@
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted
  * provided that the following conditions are met:
- *  
+ *
  * 1. Redistributions of source code must retain the above copyright notice, this list of conditions
  *    and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice, this list of
@@ -23,18 +23,38 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-plugins {
-    id("com.gradle.enterprise") version "3.9"
-}
+package eu.volsch.stockmountain.extraction.conversion;
 
-rootProject.name = "stockmountain"
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.CALLS_REAL_METHODS;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-gradleEnterprise {
-    if ("true".equals(System.getenv("CI"), true)) {
-        buildScan {
-            publishAlways()
-            termsOfServiceUrl = "https://gradle.com/terms-of-service"
-            termsOfServiceAgree = "yes"
-        }
-    }
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@ExtendWith(MockitoExtension.class)
+class ConverterTest {
+
+  @SuppressWarnings("unchecked")
+  @Test
+  void castAndConvert() throws ConversionException {
+    final Converter<String, String> converter = (Converter<String, String>)
+        mock(Converter.class, CALLS_REAL_METHODS);
+    when(converter.getSourceType()).thenReturn(String.class);
+    when(converter.convert(any(String.class))).thenReturn("testResult");
+
+    final Object source = "testRequest";
+    assertEquals("testResult", converter.castAndConvert(source));
+
+    ignoreReturn(verify(converter).getSourceType());
+    verify(converter).convert("testRequest");
+  }
+
+  private static void ignoreReturn(Object ignoredValue) {
+    // suppresses SpotBugs issue
+  }
 }

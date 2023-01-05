@@ -3,7 +3,7 @@
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted
  * provided that the following conditions are met:
- *  
+ *
  * 1. Redistributions of source code must retain the above copyright notice, this list of conditions
  *    and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice, this list of
@@ -23,18 +23,27 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-plugins {
-    id("com.gradle.enterprise") version "3.9"
-}
+package eu.volsch.stockmountain.extraction.conversion;
 
-rootProject.name = "stockmountain"
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-gradleEnterprise {
-    if ("true".equals(System.getenv("CI"), true)) {
-        buildScan {
-            publishAlways()
-            termsOfServiceUrl = "https://gradle.com/terms-of-service"
-            termsOfServiceAgree = "yes"
-        }
-    }
+/**
+ * Converts a string to a trimmed string and converts blank strings to <code>null</code>.
+ */
+public class StringConverter extends AbstractStringConverter<String> {
+
+  public static final StringConverter INSTANCE = new StringConverter();
+
+  private StringConverter() {
+  }
+
+  @Override
+  public @NonNull Class<String> getTargetType() {
+    return String.class;
+  }
+
+  @Override
+  protected String doConvert(@NonNull String source) {
+    return source;
+  }
 }
