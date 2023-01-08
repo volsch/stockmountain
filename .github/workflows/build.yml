@@ -56,9 +56,11 @@ jobs:
             build
             sonarqube 
             --scan
+            --continue
             --info
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: Package
-          path: build/libs
+          path: |
+            build/libs

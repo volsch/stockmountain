@@ -3,6 +3,7 @@ gradlew       text eol=lf
 
 *.bat         text eol=crlf
 
+*.csv         text
 *.properties  text
 *.java        text
 *.kts         text

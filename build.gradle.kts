@@ -153,8 +153,3 @@ tasks.spotbugsMain {
         setStylesheet("fancy-hist.xsl")
     }
 }
-
-tasks.sonar {
-    dependsOn(tasks.jacocoTestReport, tasks.checkstyleMain, tasks.checkstyleTest,
-            tasks.spotbugsMain, tasks.spotbugsTest)
-}
