@@ -41,7 +41,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
  */
 @Immutable
 @ThreadSafe
-public class SimpleRecordMetaData implements RecordMetaData {
+public final class SimpleRecordMetaData implements RecordMetaData {
 
   private final @NonNull Set<@NonNull Field<?>> fieldSet;
   private final @NonNull List<@NonNull Field<?>> fieldList;

@@ -23,20 +23,40 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package eu.volsch.stockmountain.extraction.api;
+package eu.volsch.stockmountain.model;
 
-import eu.volsch.stockmountain.model.BrokerAware;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * Provides a specific extractor of a broker.
- */
-public interface ExtractorProvider extends BrokerAware {
+import eu.volsch.stockmountain.model.SimpleSaleTransaction.SimpleSaleTransactionBuilder;
+import org.junit.jupiter.api.Test;
 
-  /**
-   * Returns the specific extractor of a broker.
-   *
-   * @return the extractor.
-   */
-  @NonNull Extractor getExtractor();
+class SimpleSaleTransactionTest
+    <T extends SimpleSaleTransaction, B extends SimpleSaleTransactionBuilder<T, B>>
+    extends AbstractSimpleTransactionTest<T, B> {
+
+  @Test
+  void testToBuilder() {
+    final T transaction = toBuilder(createBuilderWithData().build())
+        .isin("ES9876543")
+        .build();
+    assertData(transaction, "ES9876543");
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  protected B createBuilder() {
+    return (B) SimpleSaleTransaction.builder();
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  protected B toBuilder(T transaction) {
+    return (B) transaction.toBuilder();
+  }
+
+  @Override
+  protected void assertData(T transaction, String isin) {
+    super.assertData(transaction, isin);
+    assertEquals(TransactionType.SALE, transaction.getType());
+  }
 }

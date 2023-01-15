@@ -23,20 +23,24 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package eu.volsch.stockmountain.extraction.api;
+package eu.volsch.stockmountain.model;
 
-import eu.volsch.stockmountain.model.BrokerAware;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * Provides a specific extractor of a broker.
- */
-public interface ExtractorProvider extends BrokerAware {
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Answers;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-  /**
-   * Returns the specific extractor of a broker.
-   *
-   * @return the extractor.
-   */
-  @NonNull Extractor getExtractor();
+@ExtendWith(MockitoExtension.class)
+class PurchaseTransactionTest {
+
+  @Mock(answer = Answers.CALLS_REAL_METHODS)
+  private PurchaseTransaction transaction;
+
+  @Test
+  void getType() {
+    assertEquals(TransactionType.PURCHASE, transaction.getType());
+  }
 }

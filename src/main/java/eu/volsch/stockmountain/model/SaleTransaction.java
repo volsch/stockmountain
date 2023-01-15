@@ -23,20 +23,18 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package eu.volsch.stockmountain.extraction.api;
+package eu.volsch.stockmountain.model;
 
-import eu.volsch.stockmountain.model.BrokerAware;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
- * Provides a specific extractor of a broker.
+ * Transaction of selling securities.
  */
-public interface ExtractorProvider extends BrokerAware {
+public interface SaleTransaction extends Transaction {
 
-  /**
-   * Returns the specific extractor of a broker.
-   *
-   * @return the extractor.
-   */
-  @NonNull Extractor getExtractor();
+  @Override
+  @NonNull
+  default TransactionType getType() {
+    return TransactionType.SALE;
+  }
 }

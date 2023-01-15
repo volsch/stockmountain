@@ -23,20 +23,24 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package eu.volsch.stockmountain.extraction.api;
+package eu.volsch.stockmountain.model;
 
-import eu.volsch.stockmountain.model.BrokerAware;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.experimental.FieldDefaults;
+import lombok.experimental.SuperBuilder;
+import net.jcip.annotations.Immutable;
+import net.jcip.annotations.ThreadSafe;
 
 /**
- * Provides a specific extractor of a broker.
+ * Simple {@linkplain SaleTransaction sale transaction} implementation.
  */
-public interface ExtractorProvider extends BrokerAware {
+@Immutable
+@ThreadSafe
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+@Getter
+@SuperBuilder(toBuilder = true)
+public final class SimpleSaleTransaction extends AbstractSimpleTransaction implements
+    SaleTransaction {
 
-  /**
-   * Returns the specific extractor of a broker.
-   *
-   * @return the extractor.
-   */
-  @NonNull Extractor getExtractor();
 }

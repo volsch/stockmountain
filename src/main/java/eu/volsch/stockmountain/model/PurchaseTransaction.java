@@ -23,20 +23,41 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package eu.volsch.stockmountain.extraction.api;
+package eu.volsch.stockmountain.model;
 
-import eu.volsch.stockmountain.model.BrokerAware;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
- * Provides a specific extractor of a broker.
+ * Transaction of purchasing securities.
  */
-public interface ExtractorProvider extends BrokerAware {
+public interface PurchaseTransaction extends Transaction {
+
+  @Override
+  @NonNull
+  default TransactionType getType() {
+    return TransactionType.PURCHASE;
+  }
 
   /**
-   * Returns the specific extractor of a broker.
+   * Returns the remaining quantity. In case of a sale transaction this remaining quantity
+   * decrements. In case of a split this remaining quantity is adjusted together with the
+   * {@linkplain #getLastSplitDate() last split date}.
    *
-   * @return the extractor.
+   * @return the remaining quantity.
+   * @see #getQuantity()
+   * @see #getLastSplitDate()
    */
-  @NonNull Extractor getExtractor();
+  @Nullable BigDecimal getRemainingQuantity();
+
+  /**
+   * Returns the date of the last applied split. This date and the
+   * {@linkplain #getRemainingQuantity() remaining quantity} are updated at the same time.
+   *
+   * @return the date of the last applied split date.
+   * @see #getRemainingQuantity()
+   */
+  @Nullable LocalDate getLastSplitDate();
 }

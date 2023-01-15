@@ -23,20 +23,56 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package eu.volsch.stockmountain.extraction.api;
+package eu.volsch.stockmountain.model;
 
-import eu.volsch.stockmountain.model.BrokerAware;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
+import lombok.experimental.SuperBuilder;
+import net.jcip.annotations.Immutable;
+import net.jcip.annotations.ThreadSafe;
+import org.checkerframework.checker.index.qual.NonNegative;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
- * Provides a specific extractor of a broker.
+ * Abstract implementation of a simple {@linkplain Transaction transaction}.
  */
-public interface ExtractorProvider extends BrokerAware {
+@Immutable
+@ThreadSafe
+@NonFinal
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+@Getter
+@SuperBuilder(toBuilder = true)
+public abstract class AbstractSimpleTransaction implements Transaction {
 
-  /**
-   * Returns the specific extractor of a broker.
-   *
-   * @return the extractor.
-   */
-  @NonNull Extractor getExtractor();
+  @NonNegative long id;
+  @NonNegative int version;
+  boolean fictional;
+  @NonNull
+  LocalDate date;
+  @Nullable LocalTime time;
+  @NonNull
+  String isin;
+  @Nullable String tickerSymbol;
+  @NonNull
+  String name;
+  @Nullable String securitiesExchange;
+  @NonNull
+  BigDecimal quantity;
+  @Nullable Price localPrice;
+  @Nullable Price localValue;
+  @Nullable
+  @NonNegative
+  BigDecimal exchangeRate;
+  @Nullable Price value;
+  @Nullable Price commission;
+  @NonNull
+  Price total;
+  @Nullable String orderId;
+  @Nullable String transactionId;
 }

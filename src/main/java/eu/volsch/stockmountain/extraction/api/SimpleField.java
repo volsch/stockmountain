@@ -45,7 +45,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  */
 @Immutable
 @ThreadSafe
-public class SimpleField<T> implements Field<T> {
+public final class SimpleField<T> implements Field<T> {
 
   private final @NonNull String name;
   private final @NonNegative int ordinal;
@@ -87,12 +87,12 @@ public class SimpleField<T> implements Field<T> {
   }
 
   @Override
-  public final @NonNull String name() {
+  public @NonNull String name() {
     return name;
   }
 
   @Override
-  public final @NonNegative int ordinal() {
+  public @NonNegative int ordinal() {
     return ordinal;
   }
 
@@ -102,7 +102,7 @@ public class SimpleField<T> implements Field<T> {
   }
 
   @Override
-  public final @NonNull Class<T> type() {
+  public @NonNull Class<T> type() {
     return type;
   }
 
@@ -117,7 +117,7 @@ public class SimpleField<T> implements Field<T> {
 
   @Override
   @EqualsMethod
-  public final boolean equals(Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
@@ -130,7 +130,7 @@ public class SimpleField<T> implements Field<T> {
   }
 
   @Override
-  public final int hashCode() {
+  public int hashCode() {
     if (cachedHashCode == 0) {
       cachedHashCode = calcHashCode();
     }
@@ -141,7 +141,7 @@ public class SimpleField<T> implements Field<T> {
     return Objects.hash(name, ordinal, type, nullable);
   }
 
-  public final @NonNull String toString() {
+  public @NonNull String toString() {
     return name;
   }
 }
